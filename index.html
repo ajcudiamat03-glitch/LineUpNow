@@ -905,8 +905,17 @@ function sendPushNotification(title, body) {
   if ('Notification' in window && Notification.permission === 'granted') {
     new Notification(title, { body, icon: '' });
   }
-}
+}  	
+function fmt(n){ return String(n).padStart(3,'0'); }
 
+function updateUI(){
+  const s = getAdminState();
+  document.getElementById('heroServing').textContent  = fmt(s.current);
+  document.getElementById('statusServing').textContent = fmt(s.current);
+  updateStatus(s);
+  renderBatches(s);
+  checkAlert(s);
+}
 // ─── Init & Polling ───────────────────────
 function init(){
   renderNotifPanel();
