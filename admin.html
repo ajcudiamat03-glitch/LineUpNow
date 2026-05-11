@@ -998,7 +998,8 @@ body{font-family:'Sora',sans-serif;background:var(--bg-primary);color:var(--text
 <script src="https://www.gstatic.com/firebasejs/12.13.0/firebase-firestore-compat.js"></script>
 <script>
 // ─── Firebase Real-Time Sync (ADMIN) ─────────────────────────────────────
-// Config hardcoded — connects automatically, no manual paste needed
+// DROP-IN REPLACEMENT: replaces the first <script> block in admin.html
+
 const _FIREBASE_CONFIG = {
   apiKey: "AIzaSyBrlA1dvS3vLPYtHWOUW9U-U58lP_sysjE",
   authDomain: "lineupnow.firebaseapp.com",
@@ -1012,45 +1013,76 @@ const _FIREBASE_CONFIG = {
 window._fbReady = false;
 window._fbRef   = null;
 
-function _updateAdminSyncUI(connected){
+function _updateAdminSyncUI(connected, reason){
   const dot  = document.getElementById('fbSyncDot');
   const text = document.getElementById('fbSyncText');
-  if(!dot||!text) return;
+  if(!dot || !text) return;
   dot.style.background = connected ? '#22c55e' : '#ef4444';
-  text.textContent     = connected ? 'Live sync ON ✓' : 'Sync OFF';
+  text.textContent     = connected ? 'Live sync ON ✓' : ('Sync OFF' + (reason ? ': ' + reason : ''));
 }
 
 window._initFirebase = function(){
   try {
     const app = firebase.apps.length ? firebase.app() : firebase.initializeApp(_FIREBASE_CONFIG);
     const db  = app.firestore();
+
+    // ── Enable offline persistence so writes survive brief disconnects ──
+    db.enablePersistence({ synchronizeTabs: true }).catch(function(err){
+      if(err.code !== 'failed-precondition' && err.code !== 'unimplemented'){
+        console.warn('Persistence warning:', err);
+      }
+    });
+
     window._fbRef   = db.collection('queuemaster').doc('state');
     window._fbReady = true;
-    _updateAdminSyncUI(true);
-    var banner = document.getElementById('fbSetupBanner');
-    if(banner) banner.style.display = 'none';
-    if(typeof showToast==='function')
-      showToast('success','Connected','Every admin action syncs to ALL devices instantly!','fa-wifi');
-    // Push current state immediately on connect
-    if(window._currentState) window._fbPushState(window._currentState);
+
+    // ── Test write: proves Firestore rules allow us in ──
+    window._fbRef.set({ _ping: Date.now(), _admin: 'init' }, { merge: true })
+      .then(function(){
+        _updateAdminSyncUI(true);
+        var banner = document.getElementById('fbSetupBanner');
+        if(banner) banner.style.display = 'none';
+        if(typeof showToast === 'function')
+          showToast('success', 'Firebase Connected', 'Admin changes now sync to ALL devices instantly!', 'fa-wifi');
+        // Push full current state now that we know writes work
+        if(window._currentState) window._fbPushState(window._currentState);
+      })
+      .catch(function(e){
+        window._fbReady = false;
+        window._fbRef   = null;
+        _updateAdminSyncUI(false, 'Rules');
+        console.error('Firestore test write failed:', e);
+        if(typeof showToast === 'function')
+          showToast('danger', 'Firestore Write Blocked',
+            'Rules are blocking writes. Open Firebase Console → Firestore → Rules and set: allow read, write: if true;',
+            'fa-exclamation-triangle');
+      });
+
   } catch(e){
     console.error('Firebase init error:', e);
-    _updateAdminSyncUI(false);
-    if(typeof showToast==='function')
-      showToast('danger','Firebase Error', e.message||'Check console for details.','fa-exclamation-circle');
+    _updateAdminSyncUI(false, 'Init');
+    if(typeof showToast === 'function')
+      showToast('danger', 'Firebase Error', e.message || 'Check console for details.', 'fa-exclamation-circle');
   }
 };
 
-// Called automatically by saveState() on EVERY admin action
+// Called by saveState() on EVERY admin action
 window._fbPushState = function(state){
   if(!window._fbReady || !window._fbRef) return;
-  window._fbRef.set(state).catch(function(e){
-    console.error('Firestore write failed:', e);
-    _updateAdminSyncUI(false);
-  });
+  // .set() with no merge option = full document replace → triggers onSnapshot on user devices
+  window._fbRef.set(state)
+    .then(function(){
+      _updateAdminSyncUI(true);
+    })
+    .catch(function(e){
+      console.error('Firestore write failed:', e);
+      _updateAdminSyncUI(false, 'Write');
+      if(typeof showToast === 'function')
+        showToast('danger', 'Sync Failed', 'Firestore write error — check Rules in Firebase Console.', 'fa-wifi');
+    });
 };
 
-// Auto-connect on page load — no user action required
+// Auto-connect on page load
 window.addEventListener('load', function(){ window._initFirebase(); });
 </script>
 <script>
