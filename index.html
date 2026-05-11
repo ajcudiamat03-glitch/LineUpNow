@@ -527,7 +527,16 @@ function getAdminState(){
     batches:[{label:'Batch 1',start:1,end:40},{label:'Batch 2',start:41,end:80},{label:'Batch 3',start:81,end:120}],
     log:[]};
 }
+function fmt(n){ return String(n).padStart(3,'0'); }
 
+function updateUI(){
+  const s = getAdminState();
+  document.getElementById('heroServing').textContent  = fmt(s.current);
+  document.getElementById('statusServing').textContent = fmt(s.current);
+  updateStatus(s);
+  renderBatches(s);
+  checkAlert(s);
+}
 // ─── Theme ────────────────────────────────
 function toggleTheme(){
   const html=document.documentElement;
@@ -580,9 +589,7 @@ function signOut(){
 }
 
 // ─── Get Number ───────────────────────────
-// ─── REPLACE your entire getNumber() function in index.html with this ───────
-// Uses Firestore transaction to atomically assign unique queue numbers.
-// No two devices can ever get the same number.
+
 
 function getNumber(){
   if(!user){
@@ -906,16 +913,6 @@ function sendPushNotification(title, body) {
     new Notification(title, { body, icon: '' });
   }
 }  	
-function fmt(n){ return String(n).padStart(3,'0'); }
-
-function updateUI(){
-  const s = getAdminState();
-  document.getElementById('heroServing').textContent  = fmt(s.current);
-  document.getElementById('statusServing').textContent = fmt(s.current);
-  updateStatus(s);
-  renderBatches(s);
-  checkAlert(s);
-}
 // ─── Init & Polling ───────────────────────
 function init(){
   renderNotifPanel();
