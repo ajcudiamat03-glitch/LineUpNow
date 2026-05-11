@@ -609,6 +609,7 @@ function getNumber(){
   // ── If Firebase is live, use an atomic Firestore transaction ──
   if(window._fbReady && window._fbRef){
     const db = firebase.app().firestore();
+    window._fbRef = db.collection('queuemaster').doc('state')
 
     db.runTransaction(function(transaction){
       return transaction.get(window._fbRef).then(function(snap){
