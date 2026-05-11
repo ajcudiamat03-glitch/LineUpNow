@@ -416,8 +416,9 @@ body{font-family:'Sora',sans-serif;background:var(--bg-primary);color:var(--text
 <script src="https://www.gstatic.com/firebasejs/12.13.0/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/12.13.0/firebase-firestore-compat.js"></script>
 <script>
-// ─── Firebase Real-Time Sync (USER PORTAL) ────────────────────────────────
-// Config is hardcoded — no need to paste it manually
+// ─── Firebase Real-Time Sync (USER PORTAL) ───────────────────────────────
+// DROP-IN REPLACEMENT: replaces the first <script> block in index.html
+
 const _FIREBASE_CONFIG = {
   apiKey: "AIzaSyBrlA1dvS3vLPYtHWOUW9U-U58lP_sysjE",
   authDomain: "lineupnow.firebaseapp.com",
@@ -432,49 +433,80 @@ window._fbReady = false;
 window._fbState = null;
 window._fbUnsub = null;
 
-function _updateSyncUI(connected){
+function _updateSyncUI(connected, reason){
   const dot  = document.getElementById('syncStatusDot');
   const text = document.getElementById('syncStatusText');
-  if(!dot||!text) return;
+  if(!dot || !text) return;
   dot.style.background = connected ? '#22c55e' : '#ef4444';
-  text.textContent     = connected ? 'Live ✓' : 'Offline';
+  text.textContent     = connected ? 'Live ✓' : ('Offline' + (reason ? ': ' + reason : ''));
 }
 
 window._initFirebase = function(){
   try {
     const app = firebase.apps.length ? firebase.app() : firebase.initializeApp(_FIREBASE_CONFIG);
     const db  = app.firestore();
-    const ref = db.collection('queuemaster').doc('state');
 
-    if(window._fbUnsub) window._fbUnsub();
-
-    // REAL-TIME LISTENER — fires on every admin action across ALL devices
-    window._fbUnsub = ref.onSnapshot(function(snap){
-      if(snap.exists){
-        const data = snap.data();
-        window._fbState = data;
-        localStorage.setItem('queueState', JSON.stringify(data));
-        if(typeof updateUI === 'function') updateUI();
-        if(typeof checkAlert === 'function') checkAlert(data);
+    // ── Enable offline persistence (survives brief network drops) ──
+    db.enablePersistence({ synchronizeTabs: true }).catch(function(err){
+      if(err.code !== 'failed-precondition' && err.code !== 'unimplemented'){
+        console.warn('Persistence warning:', err);
       }
-    }, function(err){
-      console.error('Firestore error:', err);
-      _updateSyncUI(false);
     });
 
-    window._fbReady = true;
-    _updateSyncUI(true);
-    // Hide the manual config banner — no longer needed
-    var banner = document.getElementById('fbSetupBanner');
-    if(banner) banner.style.display = 'none';
+    const ref = db.collection('queuemaster').doc('state');
+
+    if(window._fbUnsub) window._fbUnsub(); // detach old listener if re-initialising
+
+    // ── Real-time listener — fires instantly on every admin change ──
+    window._fbUnsub = ref.onSnapshot(
+      function(snap){
+        _updateSyncUI(true);
+        window._fbReady = true;
+
+        if(snap.exists){
+          const data = snap.data();
+          // Ignore our own _ping test-write; only process real queue state
+          if(data.current !== undefined){
+            window._fbState = data;
+            localStorage.setItem('queueState', JSON.stringify(data));
+            if(typeof updateUI   === 'function') updateUI();
+            if(typeof checkAlert === 'function') checkAlert(data);
+          }
+        } else {
+          // Document doesn't exist yet — admin hasn't acted yet
+          console.info('queuemaster/state does not exist yet. Waiting for first admin action...');
+        }
+      },
+      function(err){
+        console.error('Firestore listener error:', err.code, err.message);
+        _updateSyncUI(false, err.code);
+        window._fbReady = false;
+
+        if(err.code === 'permission-denied'){
+          // Most common problem — rules blocking reads
+          const dot  = document.getElementById('syncStatusDot');
+          const text = document.getElementById('syncStatusText');
+          if(text) text.textContent = 'Offline: Rules blocked';
+          console.error(
+            'Fix: Firebase Console → Firestore → Rules → publish:\n' +
+            'rules_version = "2";\n' +
+            'service cloud.firestore {\n' +
+            '  match /databases/{database}/documents {\n' +
+            '    match /queuemaster/{doc} { allow read, write: if true; }\n' +
+            '  }\n' +
+            '}'
+          );
+        }
+      }
+    );
 
   } catch(e){
     console.error('Firebase init error:', e);
-    _updateSyncUI(false);
+    _updateSyncUI(false, 'Init');
   }
 };
 
-// Auto-connect as soon as page loads
+// Auto-connect as soon as SDKs load
 window.addEventListener('load', function(){ window._initFirebase(); });
 </script>
 <script>
