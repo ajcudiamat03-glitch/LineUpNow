@@ -1578,6 +1578,7 @@ function prevQueue(){
 function resetQueue(){
   if(!confirm('Reset entire queue to 001? This cannot be undone.')) return;
   state.current=1; state.served=[]; state.called=[];
+  state.nextAssign = 2;
   state.log.push({num:'---',status:'Reset',time:new Date().toLocaleTimeString()});
   localStorage.removeItem('queueNextAssign'); // reset the user number assignment counter
   render();
