@@ -580,43 +580,107 @@ function signOut(){
 }
 
 // ─── Get Number ───────────────────────────
+// ─── REPLACE your entire getNumber() function in index.html with this ───────
+// Uses Firestore transaction to atomically assign unique queue numbers.
+// No two devices can ever get the same number.
+
 function getNumber(){
-  if(!user){showToast('danger','Not Signed In','Please sign in first.','fa-times');return;}
-  if(myNumber>0){showToast('warning','Already Assigned','Your number is '+fmt(myNumber),'fa-ticket-alt');return;}
-  const s=getAdminState();
-  // Use a shared counter so multiple users don't collide; start after current
-  const nextKey='queueNextAssign';
-  let next=parseInt(localStorage.getItem(nextKey)||String(s.current+1));
-  if(next<=s.current) next=s.current+1; // keep ahead of serving counter
-  if(next>s.total){showToast('danger','Queue Full','No more numbers available.','fa-times');return;}
-  myNumber=next;
-  localStorage.setItem(nextKey,myNumber+1); // advance shared counter
-  localStorage.setItem('myNumber',myNumber);
-  document.getElementById('getNumberBtn').disabled=true;
-  document.getElementById('yourNumberBox').style.display='block';
-  document.getElementById('yourNumber').textContent=fmt(myNumber);
-  // show ticket
-  const t=document.getElementById('ticketBox');
-  t.classList.add('show');
-  document.getElementById('ticketNum').textContent=fmt(myNumber);
-  document.getElementById('ticketName').textContent=user.name+' (ID: '+user.id+')';
-  document.getElementById('ticketTime').textContent='Issued: '+new Date().toLocaleString();
-  showToast('success','Number Assigned!','Your queue number is '+fmt(myNumber),'fa-ticket-alt');
-  addNotification('info', 'Queue Number Assigned', 'Your number is #'+fmt(myNumber)+'. Please wait for your turn.', 'fa-ticket-alt');
-  updateStatus(s);
+  if(!user){
+    showToast('danger','Not Signed In','Please sign in first.','fa-times');
+    return;
+  }
+  if(myNumber > 0){
+    showToast('warning','Already Assigned','Your number is '+fmt(myNumber),'fa-ticket-alt');
+    return;
+  }
+
+  // Disable the button immediately to prevent double-tap
+  const btn = document.getElementById('getNumberBtn');
+  btn.disabled = true;
+  btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Assigning...';
+
+  // ── If Firebase is live, use an atomic Firestore transaction ──
+  if(window._fbReady && window._fbRef){
+    const db = firebase.app().firestore();
+
+    db.runTransaction(function(transaction){
+      return transaction.get(window._fbRef).then(function(snap){
+        if(!snap.exists){
+          throw new Error('Queue state not found. Admin must initialize the queue first.');
+        }
+        const data = snap.data();
+        const current  = data.current  || 1;
+        const total    = data.total    || 120;
+        // nextAssign tracks the next available number to hand out
+        // starts at current+1 if not set yet
+        let nextAssign = data.nextAssign || (current + 1);
+
+        if(nextAssign > total){
+          throw new Error('QUEUE_FULL');
+        }
+
+        const assigned = nextAssign;
+        // Atomically increment so the next caller gets the next number
+        transaction.update(window._fbRef, { nextAssign: nextAssign + 1 });
+        return assigned;
+      });
+    })
+    .then(function(assigned){
+      myNumber = assigned;
+      localStorage.setItem('myNumber', myNumber);
+      _showTicket();
+    })
+    .catch(function(err){
+      btn.disabled = false;
+      btn.innerHTML = '<i class="fas fa-plus-circle"></i> Get Number';
+      if(err.message === 'QUEUE_FULL'){
+        showToast('danger','Queue Full','No more numbers available.','fa-times');
+      } else {
+        showToast('danger','Error', err.message || 'Could not assign number. Try again.','fa-times');
+        console.error('Transaction failed:', err);
+      }
+    });
+
+  } else {
+    // ── Offline fallback: localStorage counter (single-device only) ──
+    const s = getAdminState();
+    const nextKey = 'queueNextAssign';
+    let next = parseInt(localStorage.getItem(nextKey) || String(s.current + 1));
+    if(next <= s.current) next = s.current + 1;
+    if(next > s.total){
+      btn.disabled = false;
+      btn.innerHTML = '<i class="fas fa-plus-circle"></i> Get Number';
+      showToast('danger','Queue Full','No more numbers available.','fa-times');
+      return;
+    }
+    myNumber = next;
+    localStorage.setItem(nextKey, myNumber + 1);
+    localStorage.setItem('myNumber', myNumber);
+    _showTicket();
+  }
 }
 
-// ─── Format ───────────────────────────────
-function fmt(n){return String(n).padStart(3,'0');}
+// ── Helper: show the ticket UI after a number is assigned ──────────────────
+function _showTicket(){
+  const btn = document.getElementById('getNumberBtn');
+  btn.disabled = true;
+  btn.innerHTML = '<i class="fas fa-plus-circle"></i> Get Number';
 
-// ─── Update UI ───────────────────────────
-function updateUI(){
-  const s=getAdminState();
-  document.getElementById('heroServing').textContent=fmt(s.current);
-  document.getElementById('statusServing').textContent=fmt(s.current);
+  document.getElementById('yourNumberBox').style.display = 'block';
+  document.getElementById('yourNumber').textContent = fmt(myNumber);
+
+  const t = document.getElementById('ticketBox');
+  t.classList.add('show');
+  document.getElementById('ticketNum').textContent  = fmt(myNumber);
+  document.getElementById('ticketName').textContent = user.name + ' (ID: ' + user.id + ')';
+  document.getElementById('ticketTime').textContent = 'Issued: ' + new Date().toLocaleString();
+
+  showToast('success','Number Assigned!','Your queue number is ' + fmt(myNumber),'fa-ticket-alt');
+  addNotification('info','Queue Number Assigned',
+    'Your number is #' + fmt(myNumber) + '. Please wait for your turn.','fa-ticket-alt');
+
+  const s = getAdminState();
   updateStatus(s);
-  renderBatches(s);
-  checkAlert(s);
 }
 
 function updateStatus(s){
