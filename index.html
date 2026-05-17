@@ -115,15 +115,6 @@ body{font-family:'Sora',sans-serif;background:var(--bg-primary);color:var(--text
 .alert-num{font-family:'Orbitron',sans-serif;font-size:48px;font-weight:900;color:var(--accent-green);margin:12px 0;text-shadow:var(--glow-green);}
 .btn-dismiss{margin-top:18px;background:linear-gradient(135deg,var(--accent-orange),#ea580c);border:none;border-radius:10px;padding:12px 32px;font-family:'Sora',sans-serif;font-size:14px;font-weight:700;color:#fff;cursor:pointer;}
 
-/* Ticket */
-.ticket{border:2px dashed var(--border-glow);border-radius:14px;padding:20px;text-align:center;position:relative;overflow:hidden;background:var(--bg-card2);margin-top:16px;display:none;}
-.ticket.show{display:block;}
-.ticket::before{content:'QUEUE TICKET';position:absolute;top:8px;left:50%;transform:translateX(-50%);font-size:9px;font-weight:700;letter-spacing:3px;color:var(--text-muted);}
-.ticket-num{font-family:'Orbitron',sans-serif;font-size:48px;font-weight:900;color:var(--accent-cyan);margin:8px 0;letter-spacing:4px;}
-.ticket-name{font-size:13px;color:var(--text-secondary);}
-.ticket-time{font-size:11px;color:var(--text-muted);margin-top:4px;}
-.btn-print{background:linear-gradient(135deg,var(--accent-blue),#7c3aed);border:none;border-radius:8px;padding:8px 18px;font-size:12px;font-weight:700;color:#fff;cursor:pointer;margin-top:10px;font-family:'Sora',sans-serif;}
-
 /* Toast */
 .toast-container{position:fixed;bottom:24px;right:24px;z-index:9998;display:flex;flex-direction:column;gap:10px;}
 .toast{background:var(--bg-card);border:1px solid var(--border);border-left:4px solid var(--accent-cyan);border-radius:10px;padding:14px 18px;min-width:260px;box-shadow:var(--shadow);display:flex;align-items:center;gap:12px;animation:slideIn .3s ease;}
@@ -141,28 +132,7 @@ body{font-family:'Sora',sans-serif;background:var(--bg-primary);color:var(--text
 ::-webkit-scrollbar-track{background:var(--bg-primary);}
 ::-webkit-scrollbar-thumb{background:var(--border-glow);border-radius:4px;}
 
-/* ── Ad Banners ── */
-.ad-leaderboard{width:100%;max-width:728px;margin:0 auto 20px;background:var(--bg-card);border:1px solid var(--border);border-radius:12px;overflow:hidden;position:relative;display:flex;align-items:center;justify-content:center;min-height:90px;}
-.ad-leaderboard .ad-label{position:absolute;top:5px;left:10px;font-size:9px;color:var(--text-muted);letter-spacing:1px;text-transform:uppercase;}
-.ad-leaderboard .ad-close{position:absolute;top:5px;right:8px;background:none;border:none;color:var(--text-muted);font-size:14px;cursor:pointer;line-height:1;padding:2px 4px;border-radius:4px;}
-.ad-leaderboard .ad-close:hover{color:var(--accent-red);}
-.ad-banner-inner{display:flex;align-items:center;gap:16px;padding:14px 20px;width:100%;}
-.ad-banner-icon{width:48px;height:48px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:22px;flex-shrink:0;}
-.ad-banner-copy{flex:1;}
-.ad-banner-copy .ad-tag{font-size:9px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--text-muted);margin-bottom:2px;}
-.ad-banner-copy .ad-headline{font-size:14px;font-weight:700;color:var(--text-primary);margin-bottom:2px;}
-.ad-banner-copy .ad-sub{font-size:11px;color:var(--text-secondary);}
-.ad-cta{background:linear-gradient(135deg,var(--accent-cyan),var(--accent-teal));color:#fff;border:none;border-radius:8px;padding:8px 16px;font-size:12px;font-weight:700;cursor:pointer;white-space:nowrap;font-family:'Sora',sans-serif;text-decoration:none;display:inline-block;}
-.ad-cta:hover{opacity:.9;color:#fff;}
-.ad-sidebar{background:var(--bg-card);border:1px solid var(--border);border-radius:12px;padding:0;overflow:hidden;position:relative;margin-bottom:20px;}
-.ad-sidebar .ad-label{font-size:9px;color:var(--text-muted);letter-spacing:1px;text-transform:uppercase;padding:8px 12px 4px;display:block;}
-.ad-sidebar-inner{padding:12px 14px 14px;}
-.ad-sidebar-img{width:100%;height:100px;border-radius:8px;object-fit:cover;background:linear-gradient(135deg,#1e2235,#2d3258);display:flex;align-items:center;justify-content:center;margin-bottom:10px;font-size:32px;}
-.ad-sidebar-headline{font-size:13px;font-weight:700;color:var(--text-primary);margin-bottom:4px;}
-.ad-sidebar-sub{font-size:11px;color:var(--text-secondary);margin-bottom:10px;line-height:1.5;}
-.ad-sidebar-cta{width:100%;background:linear-gradient(135deg,#4f46e5,#7c3aed);color:#fff;border:none;border-radius:8px;padding:9px;font-size:12px;font-weight:700;cursor:pointer;font-family:'Sora',sans-serif;}
-
-/* ── Notification Bell ── */
+/* Notification Bell */
 .notif-btn{position:relative;background:var(--bg-card);border:1px solid var(--border);border-radius:8px;width:36px;height:36px;display:flex;align-items:center;justify-content:center;cursor:pointer;color:var(--text-secondary);font-size:15px;}
 .notif-btn:hover{border-color:var(--accent-cyan);color:var(--accent-cyan);}
 .notif-badge{position:absolute;top:-5px;right:-5px;background:var(--accent-red);color:#fff;border-radius:50%;width:16px;height:16px;font-size:9px;font-weight:700;display:flex;align-items:center;justify-content:center;display:none;}
@@ -195,7 +165,6 @@ body{font-family:'Sora',sans-serif;background:var(--bg-primary);color:var(--text
   .main-grid{grid-template-columns:1fr;}
   .serving-number{font-size:52px;}
   .notif-panel{width:280px;right:-10px;}
-  .ad-banner-copy .ad-sub{display:none;}
 }
 </style>
 </head>
@@ -269,21 +238,6 @@ body{font-family:'Sora',sans-serif;background:var(--bg-primary);color:var(--text
     <p>Sign in, get your number, and track your queue status in real time</p>
   </div>
 
-  <!-- Ad: Leaderboard Banner -->
-  <div class="ad-leaderboard" id="adLeaderboard">
-    <span class="ad-label">Advertisement</span>
-    <button class="ad-close" onclick="document.getElementById('adLeaderboard').style.display='none'" title="Close ad"><i class="fas fa-times"></i></button>
-    <div class="ad-banner-inner">
-      <div class="ad-banner-icon" style="background:linear-gradient(135deg,#f59e0b,#ef4444);">☕</div>
-      <div class="ad-banner-copy">
-        <div class="ad-tag">Sponsored</div>
-        <div class="ad-headline">Skip the Wait — Order Coffee While You Queue!</div>
-        <div class="ad-sub">BrewFast delivers to your seat. Get 20% off your first order.</div>
-      </div>
-      <a href="#" class="ad-cta" onclick="return false;">Order Now</a>
-    </div>
-  </div>
-
   <!-- Now Serving Hero -->
   <div class="serving-hero">
     <div class="serving-label"><i class="fas fa-satellite-dish me-2"></i>Now Serving</div>
@@ -340,13 +294,6 @@ body{font-family:'Sora',sans-serif;background:var(--bg-primary);color:var(--text
             <div class="your-number-val" id="yourNumber">---</div>
             <div class="queue-position" id="queuePos">Calculating position...</div>
           </div>
-          <!-- Ticket -->
-          <div class="ticket" id="ticketBox">
-            <div class="ticket-num" id="ticketNum">---</div>
-            <div class="ticket-name" id="ticketName">—</div>
-            <div class="ticket-time" id="ticketTime">—</div>
-            <button class="btn-print" onclick="printTicket()"><i class="fas fa-print me-1"></i>Print Ticket</button>
-          </div>
         </div>
       </div>
 
@@ -365,32 +312,12 @@ body{font-family:'Sora',sans-serif;background:var(--bg-primary);color:var(--text
       </div>
     </div>
 
-    <!-- Right Col: Batches + Sidebar Ad -->
+    <!-- Right Col: Batches -->
     <div style="display:flex;flex-direction:column;gap:20px;">
-      <!-- Sidebar Ad -->
-      <div class="ad-sidebar">
-        <span class="ad-label">Sponsored</span>
-        <div class="ad-sidebar-inner">
-          <div class="ad-sidebar-img" style="background:linear-gradient(135deg,#0f2027,#203a43,#2c5364);">🏥</div>
-          <div class="ad-sidebar-headline">MediCare Priority Pass</div>
-          <div class="ad-sidebar-sub">Book your health check-up and skip long queues at partner clinics.</div>
-          <button class="ad-sidebar-cta" onclick="return false;">Learn More →</button>
-        </div>
-      </div>
       <div class="card" style="height:fit-content;">
         <div class="card-header"><i class="fas fa-layer-group" style="color:var(--accent-orange)"></i><span class="card-title">Queue Batches</span></div>
         <div class="card-body" style="max-height:600px;overflow-y:auto;">
           <div id="userBatchContainer"></div>
-        </div>
-      </div>
-      <!-- Bottom Sidebar Ad -->
-      <div class="ad-sidebar" id="adSidebar2">
-        <span class="ad-label">Advertisement</span>
-        <div class="ad-sidebar-inner">
-          <div class="ad-sidebar-img" style="background:linear-gradient(135deg,#1a1a2e,#16213e,#0f3460);">📱</div>
-          <div class="ad-sidebar-headline">LineUpNow Pro App</div>
-          <div class="ad-sidebar-sub">Get instant alerts & manage your queue on the go. Free download!</div>
-          <button class="ad-sidebar-cta" style="background:linear-gradient(135deg,#16a34a,#15803d);" onclick="return false;">Download Free</button>
         </div>
       </div>
     </div>
@@ -417,8 +344,6 @@ body{font-family:'Sora',sans-serif;background:var(--bg-primary);color:var(--text
 <script src="https://www.gstatic.com/firebasejs/12.13.0/firebase-firestore-compat.js"></script>
 <script>
 // ─── Firebase Real-Time Sync (USER PORTAL) ───────────────────────────────
-// DROP-IN REPLACEMENT: replaces the first <script> block in index.html
-
 const _FIREBASE_CONFIG = {
   apiKey: "AIzaSyDPTE1osbMlx8tDhpJlUPn4m8P4VEdJuN4",
   authDomain: "lineupnow-932fb.firebaseapp.com",
@@ -446,7 +371,6 @@ window._initFirebase = function(){
     const app = firebase.apps.length ? firebase.app() : firebase.initializeApp(_FIREBASE_CONFIG);
     const db  = app.firestore();
 
-    // ── Enable offline persistence (survives brief network drops) ──
     db.enablePersistence({ synchronizeTabs: true }).catch(function(err){
       if(err.code !== 'failed-precondition' && err.code !== 'unimplemented'){
         console.warn('Persistence warning:', err);
@@ -455,9 +379,8 @@ window._initFirebase = function(){
 
     const ref = db.collection('queuemaster').doc('state');
 
-    if(window._fbUnsub) window._fbUnsub(); // detach old listener if re-initialising
+    if(window._fbUnsub) window._fbUnsub();
 
-    // ── Real-time listener — fires instantly on every admin change ──
     window._fbUnsub = ref.onSnapshot(
       function(snap){
         _updateSyncUI(true);
@@ -465,7 +388,6 @@ window._initFirebase = function(){
 
         if(snap.exists){
           const data = snap.data();
-          // Ignore our own _ping test-write; only process real queue state
           if(data.current !== undefined){
             window._fbState = data;
             localStorage.setItem('queueState', JSON.stringify(data));
@@ -473,7 +395,6 @@ window._initFirebase = function(){
             if(typeof checkAlert === 'function') checkAlert(data);
           }
         } else {
-          // Document doesn't exist yet — admin hasn't acted yet
           console.info('queuemaster/state does not exist yet. Waiting for first admin action...');
         }
       },
@@ -483,8 +404,6 @@ window._initFirebase = function(){
         window._fbReady = false;
 
         if(err.code === 'permission-denied'){
-          // Most common problem — rules blocking reads
-          const dot  = document.getElementById('syncStatusDot');
           const text = document.getElementById('syncStatusText');
           if(text) text.textContent = 'Offline: Rules blocked';
           console.error(
@@ -506,21 +425,17 @@ window._initFirebase = function(){
   }
 };
 
-// Auto-connect as soon as SDKs load
 window.addEventListener('load', function(){ window._initFirebase(); });
 </script>
 <script>
 // ─── State ───────────────────────────────
 let user = JSON.parse(localStorage.getItem('queueUser') || 'null');
 let myNumber = user ? parseInt(localStorage.getItem('myNumber') || '0') : 0;
-// alertShown persists across reloads so we don't re-alert after dismiss
 let alertShown = localStorage.getItem('alertShown_'+myNumber) === 'true';
-let lastKnownCurrent = 0; // track previous serving number to detect changes
+let lastKnownCurrent = 0;
 
 function getAdminState(){
-  // Always prefer live Firestore state pushed by onSnapshot
   if(window._fbState) return window._fbState;
-  // Fall back to localStorage (same-device or offline)
   const stored = localStorage.getItem('queueState');
   if(stored) return JSON.parse(stored);
   return {current:1, total:120, served:[], called:[],
@@ -537,6 +452,7 @@ function updateUI(){
   renderBatches(s);
   checkAlert(s);
 }
+
 // ─── Theme ────────────────────────────────
 function toggleTheme(){
   const html=document.documentElement;
@@ -570,7 +486,6 @@ function signIn(){
 }
 
 function signOut(){
-  // Clear alert tracking for this number
   if(myNumber) localStorage.removeItem('alertShown_'+myNumber);
   user=null; myNumber=0; alertShown=false; lastKnownCurrent=0;
   localStorage.removeItem('queueUser');
@@ -579,7 +494,6 @@ function signOut(){
   document.getElementById('signedSection').style.display='none';
   document.getElementById('getNumberBtn').disabled=true;
   document.getElementById('yourNumberBox').style.display='none';
-  document.getElementById('ticketBox').classList.remove('show');
   document.getElementById('statusYourNum').textContent='—';
   document.getElementById('statusPos').textContent='—';
   document.getElementById('statusWait').textContent='—';
@@ -589,8 +503,6 @@ function signOut(){
 }
 
 // ─── Get Number ───────────────────────────
-
-
 function getNumber(){
   if(!user){
     showToast('danger','Not Signed In','Please sign in first.','fa-times');
@@ -601,12 +513,10 @@ function getNumber(){
     return;
   }
 
-  // Disable the button immediately to prevent double-tap
   const btn = document.getElementById('getNumberBtn');
   btn.disabled = true;
   btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Assigning...';
 
-  // ── If Firebase is live, use an atomic Firestore transaction ──
   if(window._fbReady && window._fbRef){
     const db = firebase.app().firestore();
     window._fbRef = db.collection('queuemaster').doc('state')
@@ -619,8 +529,6 @@ function getNumber(){
         const data = snap.data();
         const current  = data.current  || 1;
         const total    = data.total    || 120;
-        // nextAssign tracks the next available number to hand out
-        // starts at current+1 if not set yet
         let nextAssign = data.nextAssign || (current + 1);
 
         if(nextAssign > total){
@@ -628,7 +536,6 @@ function getNumber(){
         }
 
         const assigned = nextAssign;
-        // Atomically increment so the next caller gets the next number
         transaction.update(window._fbRef, { nextAssign: nextAssign + 1 });
         return assigned;
       });
@@ -650,7 +557,6 @@ function getNumber(){
     });
 
   } else {
-    // ── Offline fallback: localStorage counter (single-device only) ──
     const s = getAdminState();
     const nextKey = 'queueNextAssign';
     let next = parseInt(localStorage.getItem(nextKey) || String(s.current + 1));
@@ -668,7 +574,6 @@ function getNumber(){
   }
 }
 
-// ── Helper: show the ticket UI after a number is assigned ──────────────────
 function _showTicket(){
   const btn = document.getElementById('getNumberBtn');
   btn.disabled = true;
@@ -676,12 +581,6 @@ function _showTicket(){
 
   document.getElementById('yourNumberBox').style.display = 'block';
   document.getElementById('yourNumber').textContent = fmt(myNumber);
-
-  const t = document.getElementById('ticketBox');
-  t.classList.add('show');
-  document.getElementById('ticketNum').textContent  = fmt(myNumber);
-  document.getElementById('ticketName').textContent = user.name + ' (ID: ' + user.id + ')';
-  document.getElementById('ticketTime').textContent = 'Issued: ' + new Date().toLocaleString();
 
   showToast('success','Number Assigned!','Your queue number is ' + fmt(myNumber),'fa-ticket-alt');
   addNotification('info','Queue Number Assigned',
@@ -697,7 +596,6 @@ function updateStatus(s){
   document.getElementById('yourNumber').textContent=fmt(myNumber);
   const pos=myNumber-s.current;
   if(pos<=0){
-    // called
     document.getElementById('statusPos').textContent='Now!';
     document.getElementById('statusWait').textContent='Proceed now!';
     document.getElementById('statusBadge').className='status-badge badge-called';
@@ -716,26 +614,19 @@ function updateStatus(s){
 function checkAlert(s){
   if(!myNumber || myNumber <= 0) return;
 
-  // Trigger if: current number has reached OR passed your number (catches skipped numbers)
   const isCalled = s.current >= myNumber;
-  // Also trigger if admin explicitly called your number
   const isExplicitlyCalled = s.called && s.called.includes(myNumber);
 
   if((isCalled || isExplicitlyCalled) && !alertShown){
     alertShown = true;
     localStorage.setItem('alertShown_'+myNumber, 'true');
 
-    // Show popup overlay
     document.getElementById('alertNumber').textContent = fmt(myNumber);
     document.getElementById('alertOverlay').style.display = 'flex';
 
-    // In-app notification
     addNotification('warning', "It's Your Turn!", 'Number #'+fmt(myNumber)+' — please proceed to the counter now!', 'fa-bullhorn');
-
-    // Browser push notification
     sendPushNotification("It's Your Turn!", 'Number #'+fmt(myNumber)+' — proceed to the counter now!');
 
-    // Text-to-speech announcement
     if('speechSynthesis' in window){
       window.speechSynthesis.cancel();
       const u = new SpeechSynthesisUtterance('Attention! Number '+myNumber+' is now being served. Please proceed to the counter.');
@@ -745,7 +636,6 @@ function checkAlert(s){
       window.speechSynthesis.speak(u);
     }
 
-    // Flash the page title to grab attention
     let titleFlash = 0;
     const origTitle = document.title;
     const flashInterval = setInterval(()=>{
@@ -755,13 +645,11 @@ function checkAlert(s){
     }, 600);
   }
 
-  // Reset alertShown if queue was reset back behind user's number (so it can re-trigger)
   if(s.current < myNumber && alertShown && !s.served.includes(myNumber)){
     alertShown = false;
     localStorage.removeItem('alertShown_'+myNumber);
   }
 
-  // Detect serving number change and play a soft chime
   if(lastKnownCurrent > 0 && s.current !== lastKnownCurrent && myNumber > s.current){
     const remaining = myNumber - s.current;
     if(remaining <= 5 && remaining > 0){
@@ -774,7 +662,6 @@ function checkAlert(s){
 
 function dismissAlert(){
   document.getElementById('alertOverlay').style.display = 'none';
-  // Mark as acknowledged so it doesn't keep re-showing on every poll
   localStorage.setItem('alertShown_'+myNumber, 'true');
 }
 
@@ -796,8 +683,6 @@ function renderBatches(s){
     </div>`;
   }).join('');
 }
-
-function printTicket(){window.print();}
 
 // ─── Toast ────────────────────────────────
 function showToast(type,title,msg,icon){
@@ -886,7 +771,6 @@ function toggleNotifPanel() {
   document.getElementById('notifPanel').classList.toggle('open', notifPanelOpen);
 }
 
-// Close panel when clicking outside
 document.addEventListener('click', function(e) {
   const panel = document.getElementById('notifPanel');
   const btn = document.getElementById('notifBtn');
@@ -913,12 +797,12 @@ function sendPushNotification(title, body) {
   if ('Notification' in window && Notification.permission === 'granted') {
     new Notification(title, { body, icon: '' });
   }
-}  	
+}
+
 // ─── Init & Polling ───────────────────────
 function init(){
   renderNotifPanel();
   updateNotifBadge();
-  // Hide push banner if already granted
   if ('Notification' in window && Notification.permission === 'granted') {
     const pb = document.getElementById('notifPushBanner');
     if (pb) pb.style.display = 'none';
@@ -933,9 +817,6 @@ function init(){
     if(myNumber>0){
       document.getElementById('yourNumberBox').style.display='block';
       document.getElementById('yourNumber').textContent=fmt(myNumber);
-      document.getElementById('ticketBox').classList.add('show');
-      document.getElementById('ticketNum').textContent=fmt(myNumber);
-      document.getElementById('ticketName').textContent=user.name+' (ID: '+user.id+')';
     }
   }
   updateUI();
@@ -944,7 +825,6 @@ function init(){
 
 document.addEventListener('DOMContentLoaded', () => {
   init();
-  // Auto-request notification permission so browser push works immediately
   if('Notification' in window && Notification.permission === 'default'){
     Notification.requestPermission().then(perm => {
       if(perm === 'granted'){
@@ -964,7 +844,6 @@ function toggleFbBanner(){
   const showing = b.style.display!=='none';
   b.style.display = showing ? 'none' : 'block';
   if(!showing){
-    // pre-fill saved config
     const saved=localStorage.getItem('qmFirebaseConfig');
     if(saved) document.getElementById('fbConfigInput').value=saved;
   }
